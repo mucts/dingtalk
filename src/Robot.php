@@ -23,7 +23,7 @@ class Robot
 
     public function __construct(?array $configs = null)
     {
-        $configs       = $configs ?: require_once dirname(__DIR__) . '/config/robot.php';
+        $configs       = $configs ?: require dirname(__DIR__) . '/config/robot.php';
         $this->configs = $configs;
     }
 
@@ -129,8 +129,6 @@ class Robot
                     ]
                 ]
             );
-        } catch (RequestException $exception) {
-            $response = $exception->getResponse();
         } catch (ConfigException $exception) {
             throw $exception;
         } catch (\Exception | GuzzleException $exception) {

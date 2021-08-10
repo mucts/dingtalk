@@ -1,5 +1,7 @@
 <?php
 
+use MuCTS\DingTalk\Callbacks\Cryptos\ErrorCode;
+
 if (!function_exists('data_get')) {
     /**
      * Get an item from an array using "dot" notation.
@@ -56,5 +58,27 @@ if (!function_exists('env')) {
     {
         $value = getenv($key);
         return $value ?: $def;
+    }
+}
+
+if (!function_exists('get_sha1')) {
+    /**
+     * @param $token
+     * @param $timestamp
+     * @param $nonce
+     * @param $encrypt_msg
+     * @return array
+     */
+    function get_sha1($token, $timestamp, $nonce, $encrypt_msg): array
+    {
+        try {
+            $array = array($encrypt_msg, $token, $timestamp, $nonce);
+            sort($array, SORT_STRING);
+            $str = implode($array);
+            return array(ErrorCode::$OK, sha1($str));
+        } catch (Exception $e) {
+            print $e . "\n";
+            return array(ErrorCode::$ComputeSignatureError, null);
+        }
     }
 }
